@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ff2a1703"
+    android:fadingEdge="horizontal" >
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="213dip"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:hint="username"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:typeface="sans" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="211px"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/username"
+        android:layout_alignRight="@+id/username"
+        android:layout_below="@+id/username"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:hint="password"
+        android:password="true"
+        android:textSize="18sp"
+        android:textStyle="italic"
+        android:typeface="sans" >
+
+    </EditText>
+
+    <Button
+        android:id="@+id/login"
+        android:layout_width="141px"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="38dp"
+        android:text="Login"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:typeface="serif" />
+
+</RelativeLayout>
