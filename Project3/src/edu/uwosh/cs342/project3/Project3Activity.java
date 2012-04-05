@@ -14,35 +14,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 public class Project3Activity extends Activity {
-	private Button login;
-	private String userName, userPassword;
-	private EditText password, name;
+
+	private static int totalCorrect = 0, questionNum = -1;
+	private String question, answer;
+	private String quiz[] = { "TF", "FI", "MC", "FI", "TF", "MC"  };
 	Spinner spinner;
 
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
-		final Dialog alert = new Dialog(this);
-		alert.setContentView(R.layout.auth);
-		alert.setCancelable(true);
-		alert.setTitle("Login");
-		alert.show();
-
-		login = (Button) (alert.findViewById(R.id.login));
-
-		login.setOnClickListener(new OnClickListener() {
-
-			public void onClick(View v) {
-				name = (EditText) alert.findViewById(R.id.username);
-				password = (EditText) alert.findViewById(R.id.password);
-				userName = name.getText().toString();
-				userPassword = password.getText().toString();
-				doCheckCloud();
-				alert.cancel();
-			}
-		});
 
 		Button myButton = (Button) findViewById(R.id.button1);
 		String[] items = new String[] { "Quiz 1", "Quiz 2", "Quiz 3" };
@@ -54,27 +35,53 @@ public class Project3Activity extends Activity {
 
 		myButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
+				Intent myIntent = new Intent(Project3Activity.this,
+						FillIn.class);
+				question = "In the year _____ the world will end";
+				answer = "2012";
+				myIntent.putExtra("Question", question);
+				startActivity(myIntent);
 			}
 		});
 	}
 
-	private void doCheckCloud() {
-		Cloud myCloud = new Cloud(this);
-		int authenticate = myCloud.checkUser(userName, userPassword);
+	@Override
+	protected void onResume() {
 
-		// authenticate == 0, kick them out
-		if (authenticate == 0) {
-			Context context = getApplicationContext();
-			CharSequence text = "Incorrect Username or password.  Goodbye.";
-			int duration = Toast.LENGTH_SHORT;
+		if (getIntent().hasExtra("userAnswer")) {
+			questionNum++;
+			if (getIntent().getExtras().getString("userAnswer").equals(answer))
+				totalCorrect++;
 
-			Toast toast = Toast.makeText(context, text, duration);
-			toast.show();
+			if (quiz[questionNum].equals("TF")) {
+				Intent myIntent = new Intent(Project3Activity.this,
+						Boolean.class);
+				question = "Is it nice out today?";
+				answer = "True";
+				myIntent.putExtra("Question", question);
+				startActivity(myIntent);
 
-			Intent intent = new Intent(Intent.ACTION_MAIN);
-			intent.addCategory(Intent.CATEGORY_HOME);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+			} else if (quiz[questionNum].equals("MC")) {
+				String options[] = { "2011", "2012", "2013" };
+				Intent myIntent = new Intent(Project3Activity.this,
+						MultipleChoice.class);
+				question = "What year is it?";
+				answer = "2012";
+				myIntent.putExtra("Question", question);
+				myIntent.putExtra("Options", options);
+				startActivity(myIntent);
+
+			} else {
+				Intent myIntent = new Intent(Project3Activity.this,
+						FillIn.class);
+				question = "In the year _____ the world will end";
+				answer = "2012";
+				myIntent.putExtra("Question", question);
+				startActivity(myIntent);
+			}
 		}
+
+		super.onResume();
 	}
+
 }
