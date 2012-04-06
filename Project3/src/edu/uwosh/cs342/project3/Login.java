@@ -36,6 +36,7 @@ public class Login extends Activity {
 				userPassword = password.getText().toString();
 				doCheckCloud();
 				alert.cancel();
+				
 				Intent myIntent = new Intent(Login.this, Project3Activity.class);
 				startActivity(myIntent);
 			}
