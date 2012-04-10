@@ -46,12 +46,31 @@ public class Login extends Activity {
 
 	private void doCheckCloud() {
 		Cloud myCloud = new Cloud(this);
-		int authenticate = myCloud.checkUser(userName, userPassword);
-
-		// authenticate == 0, kick them out
-		if (authenticate == 0) {
+		String authenticate = myCloud.checkUser(userName, userPassword);
+		// authenticate will return relevant text instead of just numbers, so we must compare with .equals
+		if (authenticate.equals("Login Validated")) {
+			
 			Context context = getApplicationContext();
-			CharSequence text = "Incorrect Username or password.  Goodbye.";
+			CharSequence text = "Login Validated";
+			int duration = Toast.LENGTH_SHORT;
+
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+
+		}
+		else if (authenticate.equals("Permission denied")) {
+			
+			Context context = getApplicationContext();
+			CharSequence text = "Permission to server denied";
+			int duration = Toast.LENGTH_SHORT;
+
+			Toast toast = Toast.makeText(context, text, duration);
+			toast.show();
+		}
+		else  {
+			
+			Context context = getApplicationContext();
+			CharSequence text = "Wrong username or password";
 			int duration = Toast.LENGTH_SHORT;
 
 			Toast toast = Toast.makeText(context, text, duration);
