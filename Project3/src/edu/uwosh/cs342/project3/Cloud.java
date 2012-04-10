@@ -1,7 +1,13 @@
 package edu.uwosh.cs342.project3;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.InputStream;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -31,33 +37,58 @@ public class Cloud extends SQLiteOpenHelper {
 		super(context, DB_NAME, null, 1);
 	}
 
-	public int checkUser(String userName, String passWord) {
+	public String checkUser(String userName, String passWord) {
 		try {
 
 			user = userName;
 			pass = passWord;
 			httpclient = new DefaultHttpClient();
 			httppost = new HttpPost(
-					"http://cs346.cs.uwosh.edu/students/klappt98/auth.php?user="
-							+ userName + "&password=");
+					"http://173.89.153.5/p3.php?login&user="
+							+ userName + "&pass=" + passWord);
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
 
-			data = new byte[256];
-
-			buffer = new StringBuffer();
-			int len = 0;
-			while (-1 != (len = inputStream.read(data))) {
-				buffer.append(new String(data, 0, len));
-			}
 
 			inputStream.close();
+
+			return response.getEntity().getContent().toString();
 		} catch (Exception e) {
-
+			return e.getMessage();
+			
+			
 		}
+	}
+	
+	public DocumentBuilder getQuiz(int quizId) {
+		try {
 
-		// return (buffer.charAt(0) - 48);
-		return 1;
+			httpclient = new DefaultHttpClient();
+			httppost = new HttpPost(
+					"http://173.89.153.5/p3.php?q=" + quizId);
+			response = httpclient.execute(httppost);
+			inputStream = response.getEntity().getContent();
+
+
+			inputStream.close();
+			FileWriter fstream = new FileWriter("quiz.xml");
+			BufferedWriter out = new BufferedWriter(fstream);
+			out.write(response.getEntity().getContent().toString());
+			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+			DocumentBuilder db = dbf.newDocumentBuilder();
+			db.parse("quiz.xml");
+			return db;
+
+		} catch (Exception e) {
+			
+			
+		}
+		
+		
+		return null;
+		
+		
+		
 	}
 
 	@Override
