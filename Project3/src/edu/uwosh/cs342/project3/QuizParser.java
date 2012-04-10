@@ -66,7 +66,7 @@ public class QuizParser {
 	}//end getMCQuestionPoint
 	
 	public String getMCQuestionText(int pos){
-		return ((Element)questionListMC.get(pos)).getChild("point_value").getValue();
+		return ((Element)questionListMC.get(pos)).getChild("question_text").getValue();
 	}//end getMCQuestionText
 	
 	public ArrayList<String> getMCQuestionChoices(int pos){
