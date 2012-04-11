@@ -46,7 +46,7 @@ public class Cloud extends SQLiteOpenHelper {
 			user = userName;
 			pass = passWord;
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost("http://173.89.153.5user/p3.php?login");
+			httppost = new HttpPost("http://173.89.153.5/p3.php?login");
 			
 
 			nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -70,7 +70,7 @@ public class Cloud extends SQLiteOpenHelper {
 
 			inputStream.close();
 		}catch (Exception e) {
-			return e.getMessage();
+			return e.toString();
 		}
 		try{
 			return buffer.toString();
