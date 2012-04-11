@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,8 +13,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -39,24 +42,40 @@ public class Cloud extends SQLiteOpenHelper {
 
 	public String checkUser(String userName, String passWord) {
 		try {
-
+			
 			user = userName;
 			pass = passWord;
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost(
-					"http://173.89.153.5/p3.php?login&user="
-							+ userName + "&pass=" + passWord);
+			httppost = new HttpPost("http://173.89.153.5user/p3.php?login");
+			
+
+			nameValuePairs = new ArrayList<NameValuePair>(2);
+			nameValuePairs.add(new BasicNameValuePair("user",
+					user.trim()));
+			nameValuePairs.add(new BasicNameValuePair("pass",
+					pass.trim()));
+			httppost.setEntity(new UrlEncodedFormEntity(
+					nameValuePairs));
+
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
 
+			data = new byte[256];
+
+			buffer = new StringBuffer();
+			int len = 0;
+			while (-1 != (len = inputStream.read(data))) {
+				buffer.append(new String(data, 0, len));
+			}
 
 			inputStream.close();
-
-			return response.getEntity().getContent().toString();
-		} catch (Exception e) {
+		}catch (Exception e) {
 			return e.getMessage();
-			
-			
+		}
+		try{
+			return buffer.toString();
+		}catch(NullPointerException e){
+			return "Permission denied";
 		}
 	}
 	
