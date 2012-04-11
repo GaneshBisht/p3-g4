@@ -47,14 +47,8 @@ public class Login extends Activity {
 	private void doCheckCloud() {
 		Cloud myCloud = new Cloud(this);
 		String authenticate = myCloud.checkUser(userName, userPassword);
-		Context context = getApplicationContext();
-		CharSequence text = authenticate;
-		int duration = Toast.LENGTH_LONG;
-
-		Toast toast = Toast.makeText(context, text, duration);
-		toast.show();
 		// authenticate will return relevant text instead of just numbers, so we must compare with .equals
-		/*if (authenticate.equals("Login Validated")) {
+		if (authenticate.equals("Login validated")) {
 			
 			Context context = getApplicationContext();
 			CharSequence text = "Login Validated";
@@ -86,6 +80,6 @@ public class Login extends Activity {
 			intent.addCategory(Intent.CATEGORY_HOME);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
-		}*/
+		}
 	}
 }

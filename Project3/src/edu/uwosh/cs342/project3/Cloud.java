@@ -109,6 +109,92 @@ public class Cloud extends SQLiteOpenHelper {
 		
 		
 	}
+	
+	public String getQuizList() {
+		try {
+			
+			httpclient = new DefaultHttpClient();
+			httppost = new HttpPost("http://173.89.153.5/p3.php?qlist");
+			
+
+			nameValuePairs = new ArrayList<NameValuePair>(2);
+			response = httpclient.execute(httppost);
+			inputStream = response.getEntity().getContent();
+
+			data = new byte[256];
+
+			buffer = new StringBuffer();
+			int len = 0;
+			while (-1 != (len = inputStream.read(data))) {
+				buffer.append(new String(data, 0, len));
+			}
+
+			inputStream.close();
+		}catch (Exception e) {
+			return e.toString();
+		}
+		try{
+			return buffer.toString();
+		}catch(NullPointerException e){
+			return "Data not returned from server";
+		}
+	}
+	
+	public String getScoresList(String user) {
+		try {
+			
+			httpclient = new DefaultHttpClient();
+			httppost = new HttpPost("http://173.89.153.5/p3.php?getscores&user=" + user);
+			nameValuePairs = new ArrayList<NameValuePair>(2);
+			response = httpclient.execute(httppost);
+			inputStream = response.getEntity().getContent();
+
+			data = new byte[256];
+
+			buffer = new StringBuffer();
+			int len = 0;
+			while (-1 != (len = inputStream.read(data))) {
+				buffer.append(new String(data, 0, len));
+			}
+
+			inputStream.close();
+		}catch (Exception e) {
+			return e.toString();
+		}
+		try{
+			return buffer.toString();
+		}catch(NullPointerException e){
+			return "Data not returned from server";
+		}
+	}
+	
+	public String sendScore(String user, String quiz, String score) {
+		try {
+			
+			httpclient = new DefaultHttpClient();
+			httppost = new HttpPost("http://173.89.153.5/p3.php?sendscore&user=" + user + "&quizname=" + quiz + "&score=" + score);
+			nameValuePairs = new ArrayList<NameValuePair>(2);
+			response = httpclient.execute(httppost);
+			inputStream = response.getEntity().getContent();
+
+			data = new byte[256];
+
+			buffer = new StringBuffer();
+			int len = 0;
+			while (-1 != (len = inputStream.read(data))) {
+				buffer.append(new String(data, 0, len));
+			}
+
+			inputStream.close();
+		}catch (Exception e) {
+			return e.toString();
+		}
+		try{
+			return buffer.toString();
+		}catch(NullPointerException e){
+			return "Data not returned from server";
+		}
+	}
 
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
