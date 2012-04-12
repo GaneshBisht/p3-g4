@@ -1,8 +1,12 @@
 package edu.uwosh.cs342.project3;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.jdom.Document;
+import org.jdom.JDOMException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,65 +24,81 @@ public class MultipleChoice extends Activity {
 
 	Spinner spinner;
 	String[] data;
+	QuizParser parser;
+	int i;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.multiplechoice);
+		
+		String quizID = getIntent().getExtras().getString("Quiz");
+
+		Score myScore = new Score();
+
+		Cloud myCloud = new Cloud(this);
+
+		try {
+			parser = new QuizParser(new Document());
+			// new QuizParser(myCloud.getQuiz(quizID));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		}
 
 		Button myButton = (Button) findViewById(R.id.button01);
 		TextView tv = (TextView) findViewById(R.id.textView1);
-		TextView tv2 = (TextView)findViewById(R.id.textView2);
-		data = getIntent().getExtras().getStringArray("Question");
-		tv.setText(data[1]);
-		Score myScore = new Score();
-		tv2.setText("Current Score: " + Integer.toString(myScore.get()));
+		TextView tv2 = (TextView) findViewById(R.id.textView2);
 
-		String[] items;
+		for (i = 0; i < parser.getNumMCQuestions(); i++) {
+			tv.setText(parser.getMCQuestionPoint(i));
 
-		List<String> list = new ArrayList<String>();
+			tv2.setText("Current Score: " + Integer.toString(myScore.get()));
 
-		for (int i = 3; i < data.length; i++) {
-			list.add(data[i]);
-		}
-		items = list.toArray(new String[list.size()]);
+			String[] items;
 
-		spinner = (Spinner) findViewById(R.id.spinner1);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_item, items);
-		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spinner.setAdapter(adapter);
+			List<String> list = parser.getMCQuestionChoices(i);
 
-		myButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent myIntent = new Intent(MultipleChoice.this, Control.class);
-				String text = spinner.getSelectedItem().toString();
+			items = list.toArray(new String[list.size()]);
 
-				if (text.equals(data[2])) {
-					Score score = new Score();
-					score.increment();
-					Context context = getApplicationContext();
-					int duration = Toast.LENGTH_SHORT;
+			spinner = (Spinner) findViewById(R.id.spinner1);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+					android.R.layout.simple_spinner_item, items);
+			adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+			spinner.setAdapter(adapter);
 
-					Toast toast = Toast.makeText(context, "Correct", duration);
-					toast.setGravity(5, 5, 5);
-					toast.show();
-				} else {
-					Context context = getApplicationContext();
-					int duration = Toast.LENGTH_SHORT;
+			myButton.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					String text = spinner.getSelectedItem().toString();
 
-					Toast toast = Toast
-							.makeText(context, "Incorrect", duration);
-					toast.setGravity(5, 5, 5);
-					toast.show();
+					if (text.equals(parser.getMCQuestionAnswer(i))) {
+						Score score = new Score();
+						score.increment(parser.getMCQuestionPoint(i));
+						Context context = getApplicationContext();
+						int duration = Toast.LENGTH_SHORT;
+
+						Toast toast = Toast.makeText(context, "Correct",
+								duration);
+						toast.setGravity(5, 5, 5);
+						toast.show();
+					} else {
+						Context context = getApplicationContext();
+						int duration = Toast.LENGTH_SHORT;
+
+						Toast toast = Toast.makeText(
+								context,
+								"The correct answer is: "
+										+ parser.getMCQuestionAnswer(i),
+								duration);
+						toast.setGravity(5, 5, 5);
+						toast.show();
+					}
 				}
-
-				int number = getIntent().getExtras().getInt("Number");
-				number++;
-				myIntent.putExtra("qNumber", (number));
-				startActivity(myIntent);
-			}
-		});
-
+			});
+		}
+		Intent myIntent = new Intent(MultipleChoice.this, FillIn.class);
+		myIntent.putExtra("Quiz", quizID);
+		startActivity(myIntent);
 	}
 }
