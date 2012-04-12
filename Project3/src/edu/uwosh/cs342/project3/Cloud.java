@@ -17,6 +17,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.jdom.Document;
+import org.jdom.input.SAXBuilder;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -42,20 +44,16 @@ public class Cloud extends SQLiteOpenHelper {
 
 	public String checkUser(String userName, String passWord) {
 		try {
-			
+
 			user = userName;
 			pass = passWord;
 			httpclient = new DefaultHttpClient();
 			httppost = new HttpPost("http://173.89.153.5/p3.php?login");
-			
 
 			nameValuePairs = new ArrayList<NameValuePair>(2);
-			nameValuePairs.add(new BasicNameValuePair("user",
-					user.trim()));
-			nameValuePairs.add(new BasicNameValuePair("pass",
-					pass.trim()));
-			httppost.setEntity(new UrlEncodedFormEntity(
-					nameValuePairs));
+			nameValuePairs.add(new BasicNameValuePair("user", user.trim()));
+			nameValuePairs.add(new BasicNameValuePair("pass", pass.trim()));
+			httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
@@ -69,53 +67,47 @@ public class Cloud extends SQLiteOpenHelper {
 			}
 
 			inputStream.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return e.toString();
 		}
-		try{
+		try {
 			return buffer.toString();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			return "Permission denied";
 		}
 	}
-	
-	public DocumentBuilder getQuiz(int quizId) {
+
+	public Document getQuiz(String quizName) {
 		try {
 
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost(
-					"http://173.89.153.5/p3.php?q=" + quizId);
+			httppost = new HttpPost("http://173.89.153.5/p3.php?q=" + quizName);
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
-
 
 			inputStream.close();
 			FileWriter fstream = new FileWriter("quiz.xml");
 			BufferedWriter out = new BufferedWriter(fstream);
 			out.write(response.getEntity().getContent().toString());
-			DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-			DocumentBuilder db = dbf.newDocumentBuilder();
-			db.parse("quiz.xml");
-			return db;
+
+			SAXBuilder builder = new SAXBuilder(true);
+			Document doc = builder.build(new File("quiz.xml"));
+
+			return doc;
 
 		} catch (Exception e) {
-			
-			
+
 		}
-		
-		
+
 		return null;
-		
-		
-		
+
 	}
-	
+
 	public String getQuizList() {
 		try {
-			
+
 			httpclient = new DefaultHttpClient();
 			httppost = new HttpPost("http://173.89.153.5/p3.php?qlist");
-			
 
 			nameValuePairs = new ArrayList<NameValuePair>(2);
 			response = httpclient.execute(httppost);
@@ -130,21 +122,22 @@ public class Cloud extends SQLiteOpenHelper {
 			}
 
 			inputStream.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return e.toString();
 		}
-		try{
+		try {
 			return buffer.toString();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			return "Data not returned from server";
 		}
 	}
-	
+
 	public String getScoresList(String user) {
 		try {
-			
+
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost("http://173.89.153.5/p3.php?getscores&user=" + user);
+			httppost = new HttpPost(
+					"http://173.89.153.5/p3.php?getscores&user=" + user);
 			nameValuePairs = new ArrayList<NameValuePair>(2);
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
@@ -158,21 +151,23 @@ public class Cloud extends SQLiteOpenHelper {
 			}
 
 			inputStream.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return e.toString();
 		}
-		try{
+		try {
 			return buffer.toString();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			return "Data not returned from server";
 		}
 	}
-	
+
 	public String sendScore(String user, String quiz, String score) {
 		try {
-			
+
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost("http://173.89.153.5/p3.php?sendscore&user=" + user + "&quizname=" + quiz + "&score=" + score);
+			httppost = new HttpPost(
+					"http://173.89.153.5/p3.php?sendscore&user=" + user
+							+ "&quizname=" + quiz + "&score=" + score);
 			nameValuePairs = new ArrayList<NameValuePair>(2);
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
@@ -186,12 +181,12 @@ public class Cloud extends SQLiteOpenHelper {
 			}
 
 			inputStream.close();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			return e.toString();
 		}
-		try{
+		try {
 			return buffer.toString();
-		}catch(NullPointerException e){
+		} catch (NullPointerException e) {
 			return "Data not returned from server";
 		}
 	}

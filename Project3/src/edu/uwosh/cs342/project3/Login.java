@@ -41,7 +41,6 @@ public class Login extends Activity {
 				startActivity(myIntent);
 			}
 		});
-
 	}
 
 	private void doCheckCloud() {
@@ -50,7 +49,7 @@ public class Login extends Activity {
 		// authenticate will return relevant text instead of just numbers, so we must compare with .equals
 		if (authenticate.equals("Login validated")) {
 			
-			Context context = getApplicationContext();
+			Context context = getApplicationContext(); 
 			CharSequence text = "Login Validated";
 			int duration = Toast.LENGTH_SHORT;
 

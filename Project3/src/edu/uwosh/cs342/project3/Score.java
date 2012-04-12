@@ -3,8 +3,8 @@ package edu.uwosh.cs342.project3;
 public class Score {
 	private static int score;
 
-	public void increment() {
-		score++;
+	public void increment(int pts) {
+		score+=score;
 	}
 
 	public void reset() {
