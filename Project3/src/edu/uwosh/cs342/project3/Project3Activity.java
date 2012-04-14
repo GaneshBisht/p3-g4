@@ -18,12 +18,18 @@ public class Project3Activity extends Activity {
 
 	Spinner spinner;
 	Score myScore;
+	String userName;
 
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		myScore = new Score();
+		
+		if(getIntent().hasExtra("userName"))
+			userName = getIntent().getStringExtra("userName");
+		else
+			userName = "default";
 
 		Button myButton = (Button) findViewById(R.id.button1);
 
@@ -78,6 +84,7 @@ public class Project3Activity extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 
 		Intent myIntent = new Intent(Project3Activity.this, History.class);
+		myIntent.putExtra("userName", userName);
 		startActivity(myIntent);
 		return super.onOptionsItemSelected(item);
 	}
