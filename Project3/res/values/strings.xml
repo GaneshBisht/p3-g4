@@ -3,5 +3,13 @@
 
     <string name="hello">Hello World, Project3Activity!</string>
     <string name="app_name">Project3</string>
+    <string name="history">History</string>
+    <string name="listKey">Quiz name:                     Score:</string>
+    <string name="quizName">Quiz Name:</string>
+    <string name="quizScore">Score:</string>
+    <string name="statisticsTitle">User Statistics:</string>
+    <string name="average">Average:</string>
+    <string name="standarddev">Standard Deviation:</string>
+    <string name="defaultValue">0</string>
 
 </resources>
