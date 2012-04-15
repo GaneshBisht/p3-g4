@@ -38,8 +38,7 @@ public class FillIn extends Activity {
 
 		
 		try {
-			parser = new QuizParser(new Document());
-			// new QuizParser(myCloud.getQuiz(quizID));
+			parser = new QuizParser(myCloud.getQuiz(quizID));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JDOMException e) {

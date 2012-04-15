@@ -36,7 +36,7 @@ public class Project3Activity extends Activity {
 		Cloud myCloud = new Cloud(this);
 		String quizList = myCloud.getQuizList();
 
-		String[] items = quizList.split(" ");
+		String[] items = quizList.split("\\r?\\n");
 
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -53,9 +53,8 @@ public class Project3Activity extends Activity {
 			toast.setGravity(5, 5, 5);
 			toast.show();
 
-			myCloud.sendScore("user",
-					getIntent().getExtras().getString("Quiz"),
-					Integer.toString(myScore.get()));
+			myCloud.sendScore(myScore.getUsername(), getIntent().getExtras()
+					.getString("Quiz"), Integer.toString(myScore.get()));
 		}
 
 		myButton.setOnClickListener(new OnClickListener() {
