@@ -14,11 +14,13 @@ public class Login extends Activity {
 	private Button login;
 	private String userName, userPassword;
 	private EditText password, name;
+	private Score myScore;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		myScore = new Score();
 		final Dialog alert = new Dialog(this);
 		alert.setContentView(R.layout.auth);
 		alert.setCancelable(true);
@@ -33,6 +35,7 @@ public class Login extends Activity {
 				name = (EditText) alert.findViewById(R.id.username);
 				password = (EditText) alert.findViewById(R.id.password);
 				userName = name.getText().toString();
+				myScore.setUsername(userName);
 				userPassword = password.getText().toString();
 				doCheckCloud();
 				alert.cancel();

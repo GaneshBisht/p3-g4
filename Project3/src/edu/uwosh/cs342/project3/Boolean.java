@@ -37,8 +37,7 @@ public class Boolean extends Activity {
 		Cloud myCloud = new Cloud(this);
 
 		try {
-			parser = new QuizParser(new Document());
-			// new QuizParser(myCloud.getQuiz(quizID));
+			parser = new QuizParser(myCloud.getQuiz(quizID));
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (JDOMException e) {
