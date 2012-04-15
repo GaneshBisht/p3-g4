@@ -36,7 +36,7 @@ public class Project3Activity extends Activity {
 		Cloud myCloud = new Cloud(this);
 		String quizList = myCloud.getQuizList();
 
-		String[] items = quizList.split("\\r?\\n");
+		String[] items = quizList.split("\n");
 
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
