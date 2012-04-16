@@ -5,7 +5,7 @@ public class Score {
 	private static String userName;
 
 	public void increment(int pts) {
-		score += score;
+		score += pts;
 	}
 
 	public void reset() {

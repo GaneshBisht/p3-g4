@@ -24,6 +24,7 @@ public class MultipleChoice extends Activity {
 
 	Spinner spinner;
 	String[] data;
+	String quizID;
 	QuizParser parser;
 	int i;
 
@@ -31,8 +32,8 @@ public class MultipleChoice extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.multiplechoice);
-		
-		String quizID = getIntent().getExtras().getString("Quiz");
+
+		quizID = getIntent().getExtras().getString("Quiz");
 
 		Score myScore = new Score();
 
@@ -50,8 +51,15 @@ public class MultipleChoice extends Activity {
 		TextView tv = (TextView) findViewById(R.id.textView1);
 		TextView tv2 = (TextView) findViewById(R.id.textView2);
 
-		for (i = 0; i < parser.getNumMCQuestions(); i++) {
-			tv.setText(parser.getMCQuestionPoint(i));
+		if (getIntent().hasExtra("Number")) {
+			i = Integer.parseInt(getIntent().getExtras().get("Number")
+					.toString());
+
+		} else
+			i = 0;
+
+		if (i < parser.getNumMCQuestions()) {
+			tv.setText(parser.getMCQuestionText(i));
 
 			tv2.setText("Current Score: " + Integer.toString(myScore.get()));
 
@@ -93,11 +101,22 @@ public class MultipleChoice extends Activity {
 						toast.setGravity(5, 5, 5);
 						toast.show();
 					}
+					Intent myIntent = null;
+					i++;
+					if (i < parser.getNumMCQuestions()) {
+						myIntent = new Intent(MultipleChoice.this,
+								MultipleChoice.class);
+						myIntent.putExtra("Quiz", quizID);
+						myIntent.putExtra("Number", i);
+						startActivity(myIntent);
+					} else {
+						myIntent = new Intent(MultipleChoice.this, FillIn.class);
+						myIntent.putExtra("Quiz", quizID);
+						startActivity(myIntent);
+					}
 				}
 			});
 		}
-		Intent myIntent = new Intent(MultipleChoice.this, FillIn.class);
-		myIntent.putExtra("Quiz", quizID);
-		startActivity(myIntent);
+
 	}
 }
