@@ -50,7 +50,6 @@ public class Project3Activity extends Activity {
 			int duration = Toast.LENGTH_SHORT;
 			Toast toast = Toast.makeText(context, "You scored " + myScore.get()
 					+ " points", duration);
-			toast.setGravity(5, 5, 5);
 			toast.show();
 
 			myCloud.sendScore(myScore.getUsername(), getIntent().getExtras()
