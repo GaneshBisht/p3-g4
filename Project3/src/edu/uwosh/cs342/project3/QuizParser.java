@@ -25,8 +25,6 @@ public class QuizParser {
 	public QuizParser(Document doc) throws IOException, JDOMException{
 		//Code needs to be changed somehow to allow loading of different quiz files
 		
-		//SAXBuilder builder = new SAXBuilder(true);
-		//Document doc = builder.build(new File("quiz.xml"));
 		Element root = doc.getRootElement();
 		quizTitle = root.getChild("title").getValue();
 		numQuestions = Integer.parseInt(root.getChild("number_of_questions").getValue());
