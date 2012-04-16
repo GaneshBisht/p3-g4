@@ -15,10 +15,13 @@ public class History extends Activity {
 	private ArrayList<String> scores = new ArrayList<String>();
 	private ArrayList<String> calculator = new ArrayList<String>();
 	private TextView average, standardDev;
+	private RESEncryption myRes;
+	private static final String RES_KEY = "378927272909";
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.history);
+		myRes = new RESEncryption(RES_KEY);
 		
 		average = (TextView)findViewById(R.id.textAverage);
 		standardDev = (TextView)findViewById(R.id.textStandDev);

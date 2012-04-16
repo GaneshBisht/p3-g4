@@ -43,9 +43,12 @@ public class Cloud extends SQLiteOpenHelper {
 	List<NameValuePair> nameValuePairs;
 	public static final String DB_NAME = "contactDB.db";
 	public static final int bufferSize = 1024;
+	private static final String RES_KEY = "378927272909";
+	private RESEncryption myRes;
 
 	public Cloud(Context context) {
 		super(context, DB_NAME, null, 1);
+		myRes = new RESEncryption(RES_KEY);
 	}
 
 	public String checkUser(String userName, String passWord) {
@@ -166,6 +169,7 @@ public class Cloud extends SQLiteOpenHelper {
 
 	public String sendScore(String user, String quiz, String score) {
 		try {
+			score = myRes.encrypt(score);
 
 			httpclient = new DefaultHttpClient();
 			httppost = new HttpPost(
