@@ -12,8 +12,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class History extends Activity {
-	private ArrayList<String> scores = new ArrayList<String>();
-	private ArrayList<String> calculator = new ArrayList<String>();
+	private ArrayList<String> scores;
+	private ArrayList<String> calculator;
 	private TextView average, standardDev;
 	private RESEncryption myRes;
 	private static final String RES_KEY = "378927272909";
@@ -22,6 +22,8 @@ public class History extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.history);
 		myRes = new RESEncryption(RES_KEY);
+		scores = new ArrayList<String>();
+		calculator = new ArrayList<String>();
 		
 		average = (TextView)findViewById(R.id.textAverage);
 		standardDev = (TextView)findViewById(R.id.textStandDev);
@@ -30,25 +32,16 @@ public class History extends Activity {
 		list.setAdapter(new ArrayAdapter<String>(this, R.layout.list_item, scores));
 		list.setTextFilterEnabled(true);
 		
-		Intent intent = getIntent();
-		
-		String userName;
-		if (intent.hasExtra("userName")){
-			userName = intent.getStringExtra("userName");
-		}
-		else{
-			userName = "default";
-		}
-		
+		Score myScore = new Score();
 		Cloud cloud = new Cloud(this);
-		String scoresList = cloud.getScoresList(userName);
+		String scoresList = cloud.getScoresList(myScore.getUsername());
 		
 		String[] listItems = scoresList.split("\n");
 		for (int i = 0; i < listItems.length; i++){
 			String[] score = listItems[i].split("\\+");
 			scores.add(score[1] + "                                   " 
-					+ score[2]);
-			calculator.add(score[2]);
+					+ myRes.decrypt(score[2]));
+			calculator.add(myRes.decrypt(score[2]));
 		}
 		
 		calculateAverage();
@@ -74,5 +67,11 @@ public class History extends Activity {
 		}
 		total = total / (helpArray.length - 1);
 		standardDev.setText(Math.sqrt(total) + "");
+	}
+	
+	@Override
+	protected void onPause(){
+		super.onPause();
+		finish();
 	}
 }
