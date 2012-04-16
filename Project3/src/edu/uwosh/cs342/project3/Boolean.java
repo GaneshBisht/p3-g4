@@ -20,7 +20,7 @@ public class Boolean extends Activity {
 
 	TextView questionData, tv;
 	Button ok;
-	String theirAnswer;
+	String theirAnswer, quizID;
 	RadioButton tru;
 	int i;
 	QuizParser parser;
@@ -30,7 +30,7 @@ public class Boolean extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.bool);
 
-		String quizID = getIntent().getExtras().getString("Quiz");
+		quizID = getIntent().getExtras().getString("Quiz");
 
 		Score myScore = new Score();
 
@@ -50,7 +50,13 @@ public class Boolean extends Activity {
 
 		tv2.setText("Current Score: " + Integer.toString(myScore.get()));
 
-		for (i = 0; i < parser.getNumTFQuestions(); i++) {
+		if (getIntent().hasExtra("Number")) {
+			i = Integer.parseInt(getIntent().getExtras().get("Number")
+					.toString());
+		} else
+			i = 0;
+
+		if (i < parser.getNumTFQuestions()) {
 			questionData.setText(parser.getTFQuestionText(i));
 
 			tru = (RadioButton) findViewById(R.id.radio0);
@@ -78,17 +84,26 @@ public class Boolean extends Activity {
 						Toast toast = Toast.makeText(
 								context,
 								"The correct answer is: "
-										+ parser.getFIBQuestionAnswers(i),
+										+ parser.getTFQuestionAnswer(i),
 								duration);
 						toast.setGravity(5, 5, 5);
 						toast.show();
 					}
+					Intent myIntent = null;
+					i++;
+					if (i < parser.getNumMCQuestions()) {
+						myIntent = new Intent(Boolean.this, Boolean.class);
+						myIntent.putExtra("Quiz", quizID);
+						myIntent.putExtra("Number", i);
+						startActivity(myIntent);
+					} else {
+						myIntent = new Intent(Boolean.this,
+								Project3Activity.class);
+						myIntent.putExtra("Quiz", quizID);
+						startActivity(myIntent);
+					}
 				}
 			});
-
 		}
-		Intent myIntent = new Intent(Boolean.this, Project3Activity.class);
-		myIntent.putExtra("Quiz", quizID);
-		startActivity(myIntent);
 	}
 }
