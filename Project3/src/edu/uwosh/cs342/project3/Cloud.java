@@ -4,8 +4,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,7 +22,8 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.jdom.Document;
+import org.apache.http.io.*;
+import org.jdom.*;
 import org.jdom.input.SAXBuilder;
 
 import android.content.Context;
@@ -84,19 +90,16 @@ public class Cloud extends SQLiteOpenHelper {
 			httppost = new HttpPost("http://173.89.153.5/p3.php?q=" + quizName);
 			response = httpclient.execute(httppost);
 			inputStream = response.getEntity().getContent();
-
+			
+			SAXBuilder builder = new SAXBuilder();
+			Document doc = builder.build(inputStream);
+			
 			inputStream.close();
-			FileWriter fstream = new FileWriter("quiz.xml");
-			BufferedWriter out = new BufferedWriter(fstream);
-			out.write(response.getEntity().getContent().toString());
-
-			SAXBuilder builder = new SAXBuilder(true);
-			Document doc = builder.build(new File("quiz.xml"));
 
 			return doc;
 
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 
 		return null;
