@@ -18,7 +18,6 @@ public class Project3Activity extends Activity {
 
 	Spinner spinner;
 	Score myScore;
-
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -32,7 +31,8 @@ public class Project3Activity extends Activity {
 		Cloud myCloud = new Cloud(this);
 		String quizList = myCloud.getQuizList(username);
 
-		String[] items = quizList.split("\n");
+		final String[] items = quizList.split("\n");
+		
 
 		spinner = (Spinner) findViewById(R.id.spinner1);
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -55,14 +55,15 @@ public class Project3Activity extends Activity {
 		myButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String quiz = spinner.getSelectedItem().toString();
-
-				Intent myIntent = new Intent(Project3Activity.this,
-						MultipleChoice.class);
-				myIntent.putExtra("Quiz", quiz);
-
-				myScore.reset();
-
-				startActivity(myIntent);
+				if (items.length > 0) {
+					Intent myIntent = new Intent(Project3Activity.this,
+							MultipleChoice.class);
+					myIntent.putExtra("Quiz", quiz);
+	
+					myScore.reset();
+	
+					startActivity(myIntent);
+				}
 			}
 		});
 	}
