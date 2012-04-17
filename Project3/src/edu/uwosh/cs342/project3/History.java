@@ -36,16 +36,18 @@ public class History extends Activity {
 		Cloud cloud = new Cloud(this);
 		String scoresList = cloud.getScoresList(myScore.getUsername());
 		
-		String[] listItems = scoresList.split("\n");
-		for (int i = 0; i < listItems.length; i++){
-			String[] score = listItems[i].split("\\+");
-			scores.add(score[1] + "                                   " 
-					+ myRes.decrypt(score[2]));
-			calculator.add(myRes.decrypt(score[2]));
+		if (!scoresList.isEmpty()){
+			String[] listItems = scoresList.split("\n");
+			for (int i = 0; i < listItems.length; i++){
+				String[] score = listItems[i].split("\\+");
+				scores.add(score[1] + "                                   " 
+						+ myRes.decrypt(score[2]));
+				calculator.add(myRes.decrypt(score[2]));
+			}
+			
+			calculateAverage();
+			calculateStandardDev();
 		}
-		
-		calculateAverage();
-		calculateStandardDev();
 	}
 	
 	private void calculateAverage(){
