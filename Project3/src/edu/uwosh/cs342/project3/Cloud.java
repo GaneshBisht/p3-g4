@@ -109,11 +109,11 @@ public class Cloud extends SQLiteOpenHelper {
 
 	}
 
-	public String getQuizList() {
+	public String getQuizList(String username) {
 		try {
 
 			httpclient = new DefaultHttpClient();
-			httppost = new HttpPost("http://173.89.153.5/p3.php?qlist");
+			httppost = new HttpPost("http://173.89.153.5/p3.php?qlist&u=" + username);
 
 			nameValuePairs = new ArrayList<NameValuePair>(2);
 			response = httpclient.execute(httppost);
