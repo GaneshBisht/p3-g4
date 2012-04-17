@@ -24,11 +24,13 @@ public class Project3Activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		myScore = new Score();
+		Bundle extras = this.getIntent().getExtras();
+		String username = extras.getString("username");
 
 		Button myButton = (Button) findViewById(R.id.button1);
 
 		Cloud myCloud = new Cloud(this);
-		String quizList = myCloud.getQuizList();
+		String quizList = myCloud.getQuizList(username);
 
 		String[] items = quizList.split("\n");
 

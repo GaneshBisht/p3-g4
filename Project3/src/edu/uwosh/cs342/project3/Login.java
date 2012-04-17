@@ -41,6 +41,7 @@ public class Login extends Activity {
 				alert.cancel();
 				
 				Intent myIntent = new Intent(Login.this, Project3Activity.class);
+				myIntent.putExtra("username", userName);
 				startActivity(myIntent);
 			}
 		});
