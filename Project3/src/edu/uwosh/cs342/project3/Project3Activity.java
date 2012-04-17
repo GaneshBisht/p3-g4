@@ -55,7 +55,7 @@ public class Project3Activity extends Activity {
 		myButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				String quiz = spinner.getSelectedItem().toString();
-				if (items.length > 0) {
+				if (!quiz.isEmpty()) {
 					Intent myIntent = new Intent(Project3Activity.this,
 							MultipleChoice.class);
 					myIntent.putExtra("Quiz", quiz);
